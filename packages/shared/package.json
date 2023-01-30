@@ -1,0 +1,8 @@
+{
+	"name": "shared",
+	"version": "1.0.0",
+	"description": "Common utils and type definitions",
+	"keywords": [],
+	"author": "",
+	"license": "MIT"
+}
