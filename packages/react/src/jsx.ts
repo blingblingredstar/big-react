@@ -62,4 +62,24 @@ export const jsx = (
 	return createReactElement(type, key, ref, props);
 };
 
-export const jsxDev = jsx;
+export const jsxDev = (type: ElementType, config: any) => {
+	let key: Key = null;
+	let ref: Ref = null;
+	const props: Props = null;
+
+	Object.entries(config).forEach(([prop, propVal]) => {
+		if (prop === 'key') {
+			if (propVal !== undefined) {
+				key = '' + propVal;
+			}
+		} else if (prop === 'ref') {
+			if (propVal !== undefined) {
+				ref = propVal;
+			}
+		} else {
+			props[prop] = propVal;
+		}
+	});
+
+	return createReactElement(type, key, ref, props);
+};
