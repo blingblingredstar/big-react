@@ -34,7 +34,7 @@ export const jsx = (
 ) => {
 	let key: Key = null;
 	let ref: Ref = null;
-	const props: Props = null;
+	const props: Props = {};
 
 	Object.entries(config).forEach(([prop, propVal]) => {
 		if (prop === 'key') {
@@ -62,11 +62,10 @@ export const jsx = (
 	return createReactElement(type, key, ref, props);
 };
 
-export const jsxDev = (type: ElementType, config: any) => {
+export const jsxDEV = (type: ElementType, config: any, ...rest: any[]) => {
 	let key: Key = null;
 	let ref: Ref = null;
-	const props: Props = null;
-
+	const props: Props = {};
 	Object.entries(config).forEach(([prop, propVal]) => {
 		if (prop === 'key') {
 			if (propVal !== undefined) {
