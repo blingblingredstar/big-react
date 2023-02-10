@@ -40,7 +40,9 @@ const renderRoot = (root: FiberRootNode) => {
 			workLoop();
 			break;
 		} catch (e) {
-			console.warn('Error occurred during execution workLoop: ', e);
+			if (__DEV__) {
+				console.warn('Error occurred during execution workLoop: ', e);
+			}
 			workingInProgress = null;
 		}
 	} while (true);

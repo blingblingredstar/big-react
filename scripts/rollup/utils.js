@@ -2,6 +2,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import ts from 'rollup-plugin-typescript2';
 import cjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 
 const packagePath = path.resolve(__dirname, '../../packages');
 const distPath = path.resolve(__dirname, '../../dist/node_modules');
@@ -17,6 +18,11 @@ export function getPackageJson(pkgName) {
 	return JSON.parse(str);
 }
 
-export function getBaseRollupPlugins({ tsconfig = {} } = {}) {
-	return [cjs(), ts(tsconfig)];
+export function getBaseRollupPlugins({
+	alias = {
+		__DEV__: true
+	},
+	tsconfig = {}
+} = {}) {
+	return [replace(alias), cjs(), ts(tsconfig)];
 }
