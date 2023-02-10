@@ -30,6 +30,9 @@
 		"noImplicitReturns": false /* Enable error reporting for codepaths that do not explicitly return in a function. */,
 
 		/* Completeness */
-		"skipLibCheck": true /* Skip type checking all .d.ts files. */
+		"skipLibCheck": true /* Skip type checking all .d.ts files. */,
+		"paths": {
+			"hostConfig": ["react-reconciler/src/hostConfig.ts"]
+		}
 	}
 }
