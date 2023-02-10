@@ -10,6 +10,6 @@
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
-		"shared": "workspace/*"
+		"shared": "workspace:*"
 	}
 }
