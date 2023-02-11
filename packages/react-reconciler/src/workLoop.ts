@@ -46,6 +46,11 @@ const renderRoot = (root: FiberRootNode) => {
 			workingInProgress = null;
 		}
 	} while (true);
+
+	const finishedWork = root.current.alternate;
+	root.finishedWork = finishedWork;
+	// TODO
+	// commitRoot(root)
 };
 
 const workLoop = () => {
@@ -59,7 +64,7 @@ const performUnitOfWork = (fiber: FiberNode) => {
 	fiber.memoizedProps = fiber.pendingProps;
 
 	if (next === null) {
-		completeUnitOfWork(next);
+		completeUnitOfWork(fiber);
 	} else {
 		workingInProgress = next;
 	}

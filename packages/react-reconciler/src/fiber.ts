@@ -32,6 +32,8 @@ export class FiberNode {
 	alternate: FiberNode | null;
 	/** Side effect */
 	flags: Flags;
+	/** SubTree flags, whether the children below this node in the tree has effect */
+	subtreeFlags: Flags;
 	updateQueue: UpdateQueue<unknown> | null;
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
@@ -57,6 +59,7 @@ export class FiberNode {
 
 		this.alternate = null;
 		this.flags = NoFlags;
+		this.subtreeFlags = NoFlags;
 	}
 }
 
@@ -91,6 +94,7 @@ export const createWorkInProgress = (
 		// Otherwise it's update phase
 		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags;
+		wip.subtreeFlags = NoFlags;
 	}
 	wip.type = current.type;
 	wip.updateQueue = current.updateQueue;
