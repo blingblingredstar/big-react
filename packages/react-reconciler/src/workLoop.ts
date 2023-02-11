@@ -1,6 +1,8 @@
 import { beginWork } from './beginWork';
+import { commitMutationEffects } from './commitWork';
 import { completeWork } from './completeWork';
 import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber';
+import { MutationMask, NoFlags } from './fiberFlags';
 import { HostRoot } from './workTags';
 
 let workingInProgress: FiberNode | null;
@@ -32,6 +34,10 @@ const markUpdateFromFiberToRoot = (fiber: FiberNode) => {
 	return null;
 };
 
+/**
+ * Render phase, include beginWork and completeWork
+ * start commit phase in the end.
+ */
 const renderRoot = (root: FiberRootNode) => {
 	prepareFreshStack(root);
 
@@ -49,8 +55,42 @@ const renderRoot = (root: FiberRootNode) => {
 
 	const finishedWork = root.current.alternate;
 	root.finishedWork = finishedWork;
-	// TODO
-	// commitRoot(root)
+	commitRoot(root);
+};
+
+/**
+ * Commit phase, include three sub phase
+ * 1. beforeMutation
+ * 2. mutation
+ * 3. layout
+ */
+const commitRoot = (root: FiberRootNode) => {
+	const finishedWork = root.finishedWork;
+	// reset
+	root.finishedWork = null;
+
+	if (finishedWork === null) {
+		return;
+	}
+
+	if (__DEV__) {
+		console.warn('Commit phase start, finishedWork is: ', finishedWork);
+	}
+
+	// Check whether there are operations that need to be performed in the three sub-phases
+	const hasSubtreeEffects =
+		(finishedWork.subtreeFlags & MutationMask) !== NoFlags;
+	const hasRootEffects = (finishedWork.flags & MutationMask) !== NoFlags;
+
+	if (hasRootEffects || hasSubtreeEffects) {
+		// beforeMutation
+		// mutation
+		commitMutationEffects(finishedWork);
+		root.current = finishedWork;
+		// layout
+	} else {
+		root.current = finishedWork;
+	}
 };
 
 const workLoop = () => {
