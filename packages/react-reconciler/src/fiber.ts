@@ -1,7 +1,7 @@
 import { Props, Key, Ref, ReactElement } from 'shared';
 import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
-import { Container } from 'hostConfig';
+import { Container } from 'react-dom/src/hostConfig';
 import { UpdateQueue } from './updateQueue';
 
 export class FiberNode {

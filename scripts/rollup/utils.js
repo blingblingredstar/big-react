@@ -20,7 +20,8 @@ export function getPackageJson(pkgName) {
 
 export function getBaseRollupPlugins({
 	alias = {
-		__DEV__: true
+		__DEV__: true,
+		preventAssignment: true
 	},
 	tsconfig = {}
 } = {}) {

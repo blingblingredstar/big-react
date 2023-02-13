@@ -1,8 +1,9 @@
 import {
+	Instance,
 	appendInitialChild,
 	createInstance,
 	createTextInstance
-} from 'hostConfig';
+} from 'react-dom/src/hostConfig';
 import { FiberNode } from './fiber';
 import { HostComponent, HostRoot, HostText } from './workTags';
 import { NoFlags } from './fiberFlags';
@@ -56,7 +57,7 @@ export const completeWork = (wip: FiberNode) => {
 	}
 };
 
-const appendAllChildren = (parent: FiberNode, wip: FiberNode) => {
+const appendAllChildren = (parent: Instance, wip: FiberNode) => {
 	let node = wip.child;
 
 	while (node !== null) {

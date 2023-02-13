@@ -1,4 +1,4 @@
-import { Container, appendChildIntoContainer } from 'hostConfig';
+import { Container, appendChildIntoContainer } from 'react-dom/src/hostConfig';
 import { FiberNode, FiberRootNode } from './fiber';
 import {
 	ChildDeletion,
@@ -65,7 +65,9 @@ const commitPlacement = (nextEffect: FiberNode) => {
 		console.warn('Execute Placement operation', nextEffect);
 	}
 	const hostParent = getHostParent(nextEffect);
-	appendPlacementNodeIntoContainer(nextEffect, hostParent);
+	if (hostParent !== null) {
+		appendPlacementNodeIntoContainer(nextEffect, hostParent);
+	}
 };
 
 /**
@@ -73,7 +75,7 @@ const commitPlacement = (nextEffect: FiberNode) => {
  * like in browser, for <div><Current /></div>
  * will return the div if pass in the current
  */
-const getHostParent = (fiber: FiberNode): Container => {
+const getHostParent = (fiber: FiberNode): Container | null => {
 	let parent = fiber.return;
 	while (parent !== null) {
 		const parentTag = parent.tag;
@@ -94,6 +96,7 @@ const getHostParent = (fiber: FiberNode): Container => {
 			fiber
 		);
 	}
+	return null;
 };
 
 const appendPlacementNodeIntoContainer = (
@@ -111,7 +114,7 @@ const appendPlacementNodeIntoContainer = (
 		// traverse  siblings
 		let sibling = child.sibling;
 		while (sibling !== null) {
-			appendChildIntoContainer(sibling, hostParent);
+			appendPlacementNodeIntoContainer(sibling, hostParent);
 			sibling = sibling.sibling;
 		}
 	}
