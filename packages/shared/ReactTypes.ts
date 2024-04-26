@@ -1,9 +1,13 @@
 import { REACT_ELEMENT_TYPE } from './ReactSymbols';
 
 export type ReactType = string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ReactKey = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ReactRef = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ReactProps = Record<string, any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ElementType = any;
 
 export interface ReactElement {
