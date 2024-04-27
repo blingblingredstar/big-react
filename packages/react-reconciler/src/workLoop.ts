@@ -1,14 +1,40 @@
 import { beginWork } from './beginWork';
 import { completeWork } from './completeWork';
-import type { FiberNode } from './fiber';
+import {
+  createWorkInProgress,
+  type FiberNode,
+  type FiberRootNode,
+} from './fiber';
+import { HostRoot } from './workTags';
 
 let workInProgress: FiberNode | null = null;
 
 /**
  * Initializes the work-in-progress tree.
  */
-const prepareFreshStack = (root: FiberNode) => {
-  workInProgress = root;
+const prepareFreshStack = (root: FiberRootNode) => {
+  workInProgress = createWorkInProgress(root.current, {});
+};
+
+export const scheduleUpdateOnFiber = (fiber: FiberNode) => {
+  const fiberRootNode = markUpdateFromFiberToRoot(fiber);
+  renderRoot(fiberRootNode);
+};
+
+const markUpdateFromFiberToRoot = (fiber: FiberNode) => {
+  let current = fiber;
+  let parent = current.return;
+
+  while (parent !== null) {
+    current = parent;
+    parent = current.return;
+  }
+
+  if (current.tag === HostRoot) {
+    return current.stateNode;
+  }
+
+  return null;
 };
 
 const completeUnitOfWork = (fiber: FiberNode) => {
@@ -43,7 +69,7 @@ const workLoop = () => {
   }
 };
 
-export const renderRoot = (root: FiberNode) => {
+export const renderRoot = (root: FiberRootNode) => {
   prepareFreshStack(root);
 
   do {
