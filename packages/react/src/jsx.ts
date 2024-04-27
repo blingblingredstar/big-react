@@ -50,4 +50,18 @@ export const jsx = (
   return ReactElement(type, key, ref, _props);
 };
 
-export const jsxDEV = jsx;
+export const jsxDEV = (type: ElementType, props: ReactProps): ReactElement => {
+  const _props: Omit<ReactProps, 'key' | 'ref'> = {};
+  let key = null;
+  let ref = null;
+  Object.entries(props).forEach(([k, v]) => {
+    if (k === 'key') {
+      key = v;
+    } else if (k === 'ref') {
+      ref = v;
+    } else {
+      _props[k] = v;
+    }
+  });
+  return ReactElement(type, key, ref, _props);
+};
