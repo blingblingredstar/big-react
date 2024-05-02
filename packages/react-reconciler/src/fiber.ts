@@ -1,5 +1,10 @@
-import type { ReactKey, ReactProps, ReactRef } from 'shared/ReactTypes';
-import { WorkTag } from './workTags';
+import type {
+  ReactElement,
+  ReactKey,
+  ReactProps,
+  ReactRef,
+} from 'shared/ReactTypes';
+import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { FiberFlags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
 import { UpdateQueue } from './updateQueue';
@@ -148,4 +153,21 @@ export const createWorkInProgress = (
   wip.memoizedState = current.memoizedState;
 
   return wip;
+};
+
+export const createFiberFromElement = (element: ReactElement): FiberNode => {
+  const { type, key, props } = element;
+  let fiberTag: WorkTag = FunctionComponent;
+  if (typeof type === 'string') {
+    // For jsx element like <div />, the type is string
+    fiberTag = HostComponent;
+  } else if (typeof type !== 'function') {
+    if (__DEV__) {
+      console.warn('Unsupported element type.', type);
+    }
+  }
+
+  const fiber = new FiberNode(fiberTag, props, key);
+  fiber.type = type;
+  return fiber;
 };
