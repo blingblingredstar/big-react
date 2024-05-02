@@ -15,7 +15,7 @@ export class FiberNode {
   /**
    * For a host component, this is the DOM node.
    */
-  stateNode: any;
+  stateNode: Container | null;
   /**
    * The type of the component (class, function, host, etc).
    * For function components, this is a reference to the function.
@@ -75,6 +75,11 @@ export class FiberNode {
    * Side-effects to perform after the component has been rendered.
    */
   flags: FiberFlags;
+  /**
+   * Flags for the sub-tree.
+   * This is used to determine what has changed in the sub-tree.
+   */
+  subTreeFlags: FiberFlags;
 
   updateQueue: UpdateQueue<any> | null;
 
@@ -101,6 +106,7 @@ export class FiberNode {
 
     this.alternate = null;
     this.flags = NoFlags;
+    this.subTreeFlags = NoFlags;
   }
 }
 
@@ -145,6 +151,7 @@ export const createWorkInProgress = (
     // If there is an alternate, reuse the node by cloning it.
     wip.pendingProps = pendingProps;
     wip.flags = NoFlags;
+    wip.subTreeFlags = NoFlags;
   }
   wip.type = current.type;
   wip.updateQueue = current.updateQueue;

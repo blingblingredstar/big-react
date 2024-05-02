@@ -18,7 +18,7 @@ export const beginWork = (wip: FiberNode): FiberNode | null => {
       return null;
     default:
       if (__DEV__) {
-        console.error('Unknown Fiber Tag:', wip.tag);
+        console.error('Unknown Fiber Tag in begin work:', wip.tag);
       }
       return null;
   }

@@ -10,6 +10,7 @@ export type ReactProps = Record<string, any> & {
   children?: ReactElement;
   key?: ReactKey;
   ref?: ReactRef;
+  content?: string | number;
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ElementType = any;

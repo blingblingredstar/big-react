@@ -1,10 +1,12 @@
 import { beginWork } from './beginWork';
+import { commitMutationEffects } from './commitWork';
 import { completeWork } from './completeWork';
 import {
   createWorkInProgress,
   type FiberNode,
   type FiberRootNode,
 } from './fiber';
+import { MutationMask, NoFlags } from './fiberFlags';
 import { HostRoot } from './workTags';
 
 let workInProgress: FiberNode | null = null;
@@ -69,6 +71,33 @@ const workLoop = () => {
   }
 };
 
+const commitRoot = (root: FiberRootNode) => {
+  const finishedWork = root.finishedWork;
+  if (finishedWork === null) {
+    return;
+  }
+
+  if (__DEV__) {
+    console.log('Committing root:', finishedWork);
+  }
+
+  root.finishedWork = null;
+
+  const hasSubTreeEffects =
+    (finishedWork.subTreeFlags & MutationMask) !== NoFlags;
+  const hasRootEffects = (finishedWork.flags & MutationMask) !== NoFlags;
+
+  if (hasRootEffects || hasSubTreeEffects) {
+    // Before mutation
+    // Mutation
+    commitMutationEffects(finishedWork);
+    root.current = finishedWork;
+    // Layout(After mutation)
+  } else {
+    root.current = finishedWork;
+  }
+};
+
 export const renderRoot = (root: FiberRootNode) => {
   prepareFreshStack(root);
 
@@ -77,9 +106,15 @@ export const renderRoot = (root: FiberRootNode) => {
       workLoop();
       break;
     } catch (error) {
-      console.warn('Error during work loop:', error);
+      if (__DEV__) {
+        console.warn('Error during work loop:', error);
+      }
       workInProgress = null;
     }
     // eslint-disable-next-line no-constant-condition
   } while (true);
+
+  const finishedWork = root.current.alternate;
+  root.finishedWork = finishedWork;
+  commitRoot(root);
 };
