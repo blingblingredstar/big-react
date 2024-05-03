@@ -3,6 +3,7 @@ import type {
   ReactKey,
   ReactProps,
   ReactRef,
+  ReactType,
 } from 'shared/ReactTypes';
 import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { FiberFlags, NoFlags } from './fiberFlags';
@@ -20,7 +21,7 @@ export class FiberNode {
    * The type of the component (class, function, host, etc).
    * For function components, this is a reference to the function.
    */
-  type: any;
+  type: ReactType | null;
   /**
    * The fiber to return to after finishing processing this one.
    * This is effectively the parent fiber.

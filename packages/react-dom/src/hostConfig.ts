@@ -7,6 +7,9 @@ export const createInstance = (
   type: ReactType,
   _props: ReactProps,
 ): Container => {
+  if (typeof type !== 'string') {
+    throw new Error('Unsupported element type in createInstance.');
+  }
   // TODO: handle props
   const element = document.createElement(type);
   return element;

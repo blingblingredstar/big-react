@@ -1,6 +1,8 @@
 import { REACT_ELEMENT_TYPE } from './ReactSymbols';
 
-export type ReactType = string;
+export type ReactFunctionComponent = (props: ReactProps) => ReactElement;
+
+export type ReactType = string | ReactFunctionComponent;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ReactKey = any;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

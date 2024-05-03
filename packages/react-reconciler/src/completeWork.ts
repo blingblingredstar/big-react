@@ -6,7 +6,12 @@ import {
   Instance,
 } from 'hostConfig';
 import { FiberNode } from './fiber';
-import { HostComponent, HostRoot, HostText } from './workTags';
+import {
+  FunctionComponent,
+  HostComponent,
+  HostRoot,
+  HostText,
+} from './workTags';
 import { NoFlags } from './fiberFlags';
 
 /**
@@ -27,7 +32,7 @@ export const completeWork = (wip: FiberNode) => {
         // Update the DOM element.
       } else {
         // Create the DOM element.
-        const instance = createInstance(wip.type, newProps);
+        const instance = createInstance(wip.type as string, newProps);
         appendAllChildren(instance, wip);
         wip.stateNode = instance;
       }
@@ -43,6 +48,9 @@ export const completeWork = (wip: FiberNode) => {
         const instance = createTextInstance(newProps.content!);
         wip.stateNode = instance;
       }
+      bubbleProperties(wip);
+      return null;
+    case FunctionComponent:
       bubbleProperties(wip);
       return null;
     case HostRoot:
