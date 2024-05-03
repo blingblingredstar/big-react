@@ -6,7 +6,7 @@ import type {
 } from 'shared/ReactTypes';
 import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { FiberFlags, NoFlags } from './fiberFlags';
-import { Container } from 'hostConfig';
+import { Container, Instance } from 'hostConfig';
 import { UpdateQueue } from './updateQueue';
 
 export class FiberNode {
@@ -15,7 +15,7 @@ export class FiberNode {
   /**
    * For a host component, this is the DOM node.
    */
-  stateNode: Container | null;
+  stateNode: FiberRootNode | Container | Instance | null;
   /**
    * The type of the component (class, function, host, etc).
    * For function components, this is a reference to the function.

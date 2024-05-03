@@ -1,7 +1,9 @@
 import {
   appendInitialChild,
+  Container,
   createInstance,
   createTextInstance,
+  Instance,
 } from 'hostConfig';
 import { FiberNode } from './fiber';
 import { HostComponent, HostRoot, HostText } from './workTags';
@@ -26,7 +28,7 @@ export const completeWork = (wip: FiberNode) => {
       } else {
         // Create the DOM element.
         const instance = createInstance(wip.type, newProps);
-        appendAllChildren(instance, wip);
+        appendAllChildren(instance as Container, wip);
         wip.stateNode = instance;
       }
       bubbleProperties(wip);
@@ -38,7 +40,7 @@ export const completeWork = (wip: FiberNode) => {
         // Update the DOM element.
       } else {
         // Create the DOM element.
-        const instance = createTextInstance(newProps.content);
+        const instance = createTextInstance(newProps.content!);
         wip.stateNode = instance;
       }
       bubbleProperties(wip);
@@ -54,12 +56,12 @@ export const completeWork = (wip: FiberNode) => {
   }
 };
 
-const appendAllChildren = (parent: FiberNode, wip: FiberNode) => {
+const appendAllChildren = (parent: Container, wip: FiberNode) => {
   let node = wip.child;
 
   while (node !== null) {
     if (node.tag === HostComponent || node.tag === HostText) {
-      appendInitialChild(parent, node.stateNode);
+      appendInitialChild(parent, node.stateNode as Instance);
     } else if (node.child !== null) {
       node.child.return = node;
       node = node.child;

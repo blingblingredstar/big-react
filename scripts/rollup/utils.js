@@ -23,6 +23,7 @@ const getPackageJson = (pkgName) => {
 const getBaseRollupPlugins = ({
   alias = {
     __DEV__: true,
+    preventAssignment: true,
   },
   tsConfig = {},
 } = {}) => {

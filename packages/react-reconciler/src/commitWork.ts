@@ -1,5 +1,5 @@
-import { appendChildToContainer, Container } from 'hostConfig';
-import { FiberNode } from './fiber';
+import { appendChildToContainer, Container, Instance } from 'hostConfig';
+import { FiberNode, FiberRootNode } from './fiber';
 import { MutationMask, NoFlags, Placement } from './fiberFlags';
 import { HostComponent, HostRoot, HostText } from './workTags';
 
@@ -47,17 +47,17 @@ const getHostParent = (fiber: FiberNode): Container => {
   let parent = fiber.return;
   while (parent !== null) {
     if (parent.tag === HostComponent) {
-      return parent.stateNode;
+      return parent.stateNode as Element;
     }
     if (parent.tag === HostRoot) {
-      return parent.stateNode.container;
+      return (parent.stateNode as FiberRootNode).container;
     }
     parent = parent.return;
   }
   if (__DEV__) {
     console.error('No host parent for fiber:', fiber);
   }
-  return parent;
+  return parent as unknown as Container;
 };
 
 const appendPlacementIntoContainer = (
@@ -65,7 +65,7 @@ const appendPlacementIntoContainer = (
   container: Container,
 ) => {
   if (fiber.tag === HostComponent || fiber.tag === HostText) {
-    appendChildToContainer(fiber.stateNode, container);
+    appendChildToContainer(fiber.stateNode as Instance, container);
     return;
   }
   const child = fiber.child;

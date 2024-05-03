@@ -20,7 +20,13 @@ const prepareFreshStack = (root: FiberRootNode) => {
 
 export const scheduleUpdateOnFiber = (fiber: FiberNode) => {
   const fiberRootNode = markUpdateFromFiberToRoot(fiber);
-  renderRoot(fiberRootNode);
+  if (fiberRootNode === null) {
+    if (__DEV__) {
+      console.error('No root found for fiber:', fiber);
+    }
+    return;
+  }
+  renderRoot(fiberRootNode as FiberRootNode);
 };
 
 const markUpdateFromFiberToRoot = (fiber: FiberNode) => {
