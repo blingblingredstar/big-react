@@ -28,7 +28,7 @@ export const completeWork = (wip: FiberNode) => {
       } else {
         // Create the DOM element.
         const instance = createInstance(wip.type, newProps);
-        appendAllChildren(instance as Container, wip);
+        appendAllChildren(instance, wip);
         wip.stateNode = instance;
       }
       bubbleProperties(wip);

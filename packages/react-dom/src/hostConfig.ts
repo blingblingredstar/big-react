@@ -12,14 +12,11 @@ export const createInstance = (
   return element;
 };
 
-export const createTextInstance = (content: string | number) => {
+export const createTextInstance = (content: string | number): Instance => {
   return document.createTextNode(`${content}`);
 };
 
-export const appendInitialChild = (
-  parent: Instance | Container,
-  child: Instance,
-) => {
+export const appendInitialChild = (parent: Container, child: Instance) => {
   parent.appendChild(child);
 };
 

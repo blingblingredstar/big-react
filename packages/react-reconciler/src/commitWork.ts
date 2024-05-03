@@ -8,9 +8,12 @@ let nextEffect: FiberNode | null = null;
 export const commitMutationEffects = (wip: FiberNode) => {
   nextEffect = wip;
   while (nextEffect !== null) {
-    const child = nextEffect.child;
+    const { child } = nextEffect;
 
-    if (child !== null && (nextEffect.flags & MutationMask) !== NoFlags) {
+    if (
+      child !== null &&
+      (nextEffect.subTreeFlags & MutationMask) !== NoFlags
+    ) {
       nextEffect = child;
     } else {
       up: while (nextEffect !== null) {
@@ -47,7 +50,7 @@ const getHostParent = (fiber: FiberNode): Container => {
   let parent = fiber.return;
   while (parent !== null) {
     if (parent.tag === HostComponent) {
-      return parent.stateNode as Element;
+      return parent.stateNode as Container;
     }
     if (parent.tag === HostRoot) {
       return (parent.stateNode as FiberRootNode).container;
@@ -65,7 +68,7 @@ const appendPlacementIntoContainer = (
   container: Container,
 ) => {
   if (fiber.tag === HostComponent || fiber.tag === HostText) {
-    appendChildToContainer(fiber.stateNode as Instance, container);
+    appendChildToContainer(container, fiber.stateNode as Instance);
     return;
   }
   const child = fiber.child;
